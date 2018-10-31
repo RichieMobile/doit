@@ -1,4 +1,4 @@
-class Notes < Formula
+class Doit < Formula
   desc "Allows for creating, viewing, editing tasks from command line."
   homepage "https://github.com/RichieMobile/doit"
   url "https://github.com/RichieMobile/doit/archive/1.0.0.tar.gz"
