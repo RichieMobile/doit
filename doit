@@ -4,8 +4,9 @@ while getopts ":h" opt; do
   case ${opt} in
     h )
       echo "Usage:"
-      echo "    doit add <todo>                      Adds todo to list."
-      echo "    doit list                            Lists all todos."
+      echo "    doit add <todo>                      Adds things to do to  a list."
+      echo "    doit list                            Lists all things to do."
+      echo "    doit edit                            Opens the list of things to do in vim."
       exit 0
       ;;
    \? )
@@ -32,7 +33,7 @@ case "$subcommand" in
   # Parse options to the install sub command
   add)
     echo $1 >> $NOTEFILE
-    echo "Note added: $1"; shift  # Remove 'install' from the argument list
+    echo "doit: $1"; shift  # Remove 'install' from the argument list
     # Process package options
     # while getopts ":t:" opt; do
     #   case ${opt} in
@@ -52,8 +53,8 @@ case "$subcommand" in
     # shift $((OPTIND -1))
     ;;
   list)
-    echo "Tasks"
-    echo "====="
+    echo "doit"
+    echo "===="
     cat $NOTEFILE
     ;;
   edit)
