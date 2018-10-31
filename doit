@@ -1,3 +1,62 @@
 #!/bin/bash
 
-echo "Time to do it!"
+while getopts ":h" opt; do
+  case ${opt} in
+    h )
+      echo "Usage:"
+      echo "    doit add <todo>                      Adds todo to list."
+      echo "    doit list                            Lists all todos."
+      exit 0
+      ;;
+   \? )
+     echo "Invalid Option: -$OPTARG" 1>&2
+     exit 1
+     ;;
+  esac
+done
+shift $((OPTIND -1))
+
+WORKDIR=$HOME/.doit
+if [ ! -d "$WORKDIR" ]; then
+  # Control will enter here if $DIRECTORY doesn't exist.
+  mkdir $WORKDIR
+fi
+
+NOTEFILE=$WORKDIR/notes.txt
+if [ ! -f $NOTEFILE ]; then
+    touch $NOTEFILE
+fi
+
+subcommand=$1; shift  # Remove 'pip' from the argument list
+case "$subcommand" in
+  # Parse options to the install sub command
+  add)
+    echo $1 >> $NOTEFILE
+    echo "Note added: $1"; shift  # Remove 'install' from the argument list
+    # Process package options
+    # while getopts ":t:" opt; do
+    #   case ${opt} in
+    #     t )
+    #       target=$OPTARG
+    #       ;;
+    #     \? )
+    #       echo "Invalid Option: -$OPTARG" 1>&2
+    #       exit 1
+    #       ;;
+    #     : )
+    #       echo "Invalid Option: -$OPTARG requires an argument" 1>&2
+    #       exit 1
+    #       ;;
+    #   esac
+    # done
+    # shift $((OPTIND -1))
+    ;;
+  list)
+    echo "Tasks"
+    echo "====="
+    cat $NOTEFILE
+    ;;
+  edit)
+    vim $NOTEFILE
+    ;;
+esac
