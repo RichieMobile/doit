@@ -6,7 +6,7 @@ while getopts ":h" opt; do
       echo "Usage:"
       echo "    doit add <todo>                      Adds things to do to  a list."
       echo "    doit list                            Lists all things to do."
-      echo "    doit edit                            Opens the list of things to do in vim."
+      echo "    doit edit                            Opens the list of things to do in vi."
       exit 0
       ;;
    \? )
@@ -58,6 +58,6 @@ case "$subcommand" in
     cat $NOTEFILE
     ;;
   edit)
-    vim $NOTEFILE
+    vi $NOTEFILE
     ;;
 esac
