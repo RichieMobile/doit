@@ -14,3 +14,11 @@ How to Use
 ----------
 
 Help text will be displayed when running: `doit -h`
+
+Add things to do: `doit add <thing to do>`
+
+List all things to do: `doit list`
+
+Edit things to do: `doit edit`
+
+This will open all your things to do in vi.
