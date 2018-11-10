@@ -1,12 +1,12 @@
 #!/bin/bash
-
+WORKDIR=$HOME/.doit
 while getopts ":h" opt; do
   case ${opt} in
     h )
       echo "Usage:"
-      echo "    doit add <todo>                      Adds things to do to  a list."
+      echo "    doit add <todo>                      Adds things to do to  a list with an ID."
       echo "    doit list                            Lists all things to do."
-      echo "    doit edit                            Opens the list of things to do in vi."
+      echo "    doit complete <id>                   Removes the note with the specified ID from the list."
       exit 0
       ;;
    \? )
@@ -19,7 +19,6 @@ shift $((OPTIND -1))
 
 WORKDIR=$HOME/.doit
 if [ ! -d "$WORKDIR" ]; then
-  # Control will enter here if $DIRECTORY doesn't exist.
   mkdir $WORKDIR
 fi
 
@@ -32,7 +31,16 @@ subcommand=$1; shift  # Remove 'pip' from the argument list
 case "$subcommand" in
   # Parse options to the install sub command
   add)
-    echo $1 >> $NOTEFILE
+    COUNT=$WORKDIR/count.txt
+    if [ ! -f $COUNT ]; then
+      echo "0" > $COUNT
+    fi
+
+    read -r current_count < $COUNT
+    next_count=$((current_count + 1))
+    echo "$next_count" > $COUNT
+
+    echo "$next_count $1" >> $NOTEFILE
     echo "doit: $1"; shift  # Remove 'install' from the argument list
     # Process package options
     # while getopts ":t:" opt; do
@@ -57,7 +65,9 @@ case "$subcommand" in
     echo "===="
     cat $NOTEFILE
     ;;
-  edit)
-    vi $NOTEFILE
+  complete)
+    echo "completing line with: $1"
+    AFTER_REMOVE=`sed "/^$1/ d" < $NOTEFILE`
+    echo $AFTER_REMOVE > $NOTEFILE
     ;;
 esac
