@@ -27,6 +27,11 @@ if [ ! -f $NOTEFILE ]; then
     touch $NOTEFILE
 fi
 
+DONEITFILE=$WORKDIR/doneit.txt
+if [ ! -f $DONEITFILE ]; then
+    touch $DONEITFILE
+fi
+
 subcommand=$1; shift  # Remove 'pip' from the argument list
 case "$subcommand" in
   # Parse options to the install sub command
@@ -41,33 +46,20 @@ case "$subcommand" in
     echo "$next_count" > $COUNT
 
     echo "$next_count $1" >> $NOTEFILE
-    echo "doit: $1"; shift  # Remove 'install' from the argument list
-    # Process package options
-    # while getopts ":t:" opt; do
-    #   case ${opt} in
-    #     t )
-    #       target=$OPTARG
-    #       ;;
-    #     \? )
-    #       echo "Invalid Option: -$OPTARG" 1>&2
-    #       exit 1
-    #       ;;
-    #     : )
-    #       echo "Invalid Option: -$OPTARG requires an argument" 1>&2
-    #       exit 1
-    #       ;;
-    #   esac
-    # done
-    # shift $((OPTIND -1))
+    echo "doit: $1"; 
     ;;
   list)
-    echo "doit"
-    echo "===="
     cat $NOTEFILE
     ;;
   complete)
-    echo "completing line with: $1"
-    AFTER_REMOVE=`sed "/^$1/ d" < $NOTEFILE`
-    echo $AFTER_REMOVE > $NOTEFILE
+    TARGET=`grep "^$1" $NOTEFILE`
+    read -p "Complete doit: $TARGET [y/N]" confirmation
+    if [[ "$confirmation" == "y" ]]; then
+      AFTER_REMOVE=`sed "/^$TARGET/ d" < $NOTEFILE`
+      echo $AFTER_REMOVE > $NOTEFILE
+      echo `date "+%Y-%m-%d %H:%M:%S"` >> $DONEITFILE
+      echo $TARGET >> $DONEITFILE
+      echo "" >> $DONEITFILE
+    fi
     ;;
 esac
