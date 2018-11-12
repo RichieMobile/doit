@@ -1,5 +1,20 @@
 #!/bin/bash
 WORKDIR=$HOME/.doit
+NOTEFILE=$WORKDIR/notes.txt
+DONEITFILE=$WORKDIR/doneit.txt
+
+if [ ! -d "$WORKDIR" ]; then
+  mkdir $WORKDIR
+fi
+
+if [ ! -f $NOTEFILE ]; then
+  touch $NOTEFILE
+fi
+
+if [ ! -f $DONEITFILE ]; then
+  touch $DONEITFILE
+fi
+
 while getopts ":h" opt; do
   case ${opt} in
     h )
@@ -7,6 +22,7 @@ while getopts ":h" opt; do
       echo "    doit add <todo>                      Adds things to do to  a list with an ID."
       echo "    doit list                            Lists all things to do."
       echo "    doit complete <id>                   Removes the note with the specified ID from the list."
+      echo "    doit done                            List completed things to do."
       exit 0
       ;;
    \? )
@@ -17,24 +33,8 @@ while getopts ":h" opt; do
 done
 shift $((OPTIND -1))
 
-WORKDIR=$HOME/.doit
-if [ ! -d "$WORKDIR" ]; then
-  mkdir $WORKDIR
-fi
-
-NOTEFILE=$WORKDIR/notes.txt
-if [ ! -f $NOTEFILE ]; then
-    touch $NOTEFILE
-fi
-
-DONEITFILE=$WORKDIR/doneit.txt
-if [ ! -f $DONEITFILE ]; then
-    touch $DONEITFILE
-fi
-
-subcommand=$1; shift  # Remove 'pip' from the argument list
+subcommand=$1; shift
 case "$subcommand" in
-  # Parse options to the install sub command
   add)
     COUNT=$WORKDIR/count.txt
     if [ ! -f $COUNT ]; then
@@ -53,13 +53,18 @@ case "$subcommand" in
     ;;
   complete)
     TARGET=`grep "^$1" $NOTEFILE`
-    read -p "Complete doit: $TARGET [y/N]" confirmation
+    read -p "Complete doit: $TARGET? [y/N]" confirmation
     if [[ "$confirmation" == "y" ]]; then
       AFTER_REMOVE=`sed "/^$TARGET/ d" < $NOTEFILE`
       echo $AFTER_REMOVE > $NOTEFILE
-      echo `date "+%Y-%m-%d %H:%M:%S"` >> $DONEITFILE
+      DATE=`date "+%Y-%m-%d %H:%M:%S"`
+      echo "Date: $DATE" >> $DONEITFILE
       echo $TARGET >> $DONEITFILE
       echo "" >> $DONEITFILE
+      echo "Completed: $1"
     fi
+    ;;
+  done)
+    cat $DONEITFILE
     ;;
 esac

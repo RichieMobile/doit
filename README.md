@@ -15,10 +15,13 @@ How to Use
 
 Help text will be displayed when running: `doit -h`
 
-Add things to do: `doit add <thing to do>`
+Add things to do: `doit add <thing to do>`, this will create an ID that will
+prefix the thing to do in the list.
 
 List all things to do: `doit list`
 
-Edit things to do: `doit edit`
+To complete a doit: `doit complete <id>`
+
+To view completed doits: `doit done`
 
 This will open all your things to do in vi.
