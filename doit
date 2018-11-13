@@ -1,4 +1,9 @@
 #!/bin/bash
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
 WORKDIR=$HOME/.doit
 NOTEFILE=$WORKDIR/notes.txt
 DONEITFILE=$WORKDIR/doneit.txt
@@ -53,15 +58,16 @@ case "$subcommand" in
     ;;
   complete)
     TARGET=`grep "^$1" $NOTEFILE`
-    read -p "Complete doit: $TARGET? [y/N]" confirmation
-    if [[ "$confirmation" == "y" ]]; then
-      AFTER_REMOVE=`sed "/^$TARGET/ d" < $NOTEFILE`
-      echo $AFTER_REMOVE > $NOTEFILE
+    echo -e "Complete doit: ${GREEN}$TARGET${NC}? [y/N]" 
+    read confirmation 
+    upper_confirmation=`echo $confirmation | tr "[a-z]" "[A-Z]"`
+    if [[ "$upper_confirmation" == "Y" ]]; then
+      sed -i "" "/$1/d" "$NOTEFILE"
       DATE=`date "+%Y-%m-%d %H:%M:%S"`
       echo "Date: $DATE" >> $DONEITFILE
       echo $TARGET >> $DONEITFILE
       echo "" >> $DONEITFILE
-      echo "Completed: $1"
+      echo -e "Completed: ${GREEN}$TARGET${NC}. Type 'doit done' to view compeleted tasks."
     fi
     ;;
   done)
