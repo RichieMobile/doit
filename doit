@@ -68,7 +68,7 @@ case "$subcommand" in
       echo "ID: ${T_ARRAY[0]}" >> $DONEITFILE
       DATE=`date "+%Y-%m-%d %H:%M:%S"`
       echo "Date: $DATE" >> $DONEITFILE
-      TASK=`echo $TARGET | cut -d' ' -f2`
+      TASK=`echo $TARGET | cut -d' ' -f2-`
       echo "TASK: $TASK" >> $DONEITFILE
 
       echo "" >> $DONEITFILE
