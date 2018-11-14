@@ -63,9 +63,14 @@ case "$subcommand" in
     upper_confirmation=`echo $confirmation | tr "[a-z]" "[A-Z]"`
     if [[ "$upper_confirmation" == "Y" ]]; then
       sed -i "" "/$1/d" "$NOTEFILE"
+
+      T_ARRAY=($TARGET)
+      echo "ID: ${T_ARRAY[0]}" >> $DONEITFILE
       DATE=`date "+%Y-%m-%d %H:%M:%S"`
       echo "Date: $DATE" >> $DONEITFILE
-      echo $TARGET >> $DONEITFILE
+      TASK=`echo $TARGET | cut -d' ' -f2`
+      echo "TASK: $TASK" >> $DONEITFILE
+
       echo "" >> $DONEITFILE
       echo -e "Completed: ${GREEN}$TARGET${NC}. Type 'doit done' to view compeleted tasks."
     fi
