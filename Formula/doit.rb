@@ -1,5 +1,5 @@
 class Doit < Formula
-  desc "Allows for creating, viewing, editing tasks from command line."
+  desc "Allows for creating, viewing, and completing tasks from command line."
   homepage "https://github.com/RichieMobile/doit"
   url "https://github.com/RichieMobile/doit/archive/v1.0.0.tar.gz"
   version "1.0.0"
